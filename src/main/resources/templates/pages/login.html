@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
+<head>
+	<th:block th:insert="~{base :: head}"></th:block>
+	<title>AuctionApp - Login</title>
+</head>
+<body>
+	
+    <header th:replace="~{base :: header}"></header>
+	
+	<main>
+		<section>
+			<div class="wrapper-center">
+				<h1 th:if="${#locale.getLanguage() == 'en'}"><b class="text-secondary">Log</b>in</h1>
+				<h1 th:if="${#locale.getLanguage() == 'fr'}">Conne<b class="text-secondary">x</b>ion</h1>
+				
+				<div>
+			        <form th:action="@{/login}" method="post" class="login-form">
+		             	<label for="username" class="mt-20" th:text="|#{member.property.pseudo.label} *|"></label>
+	                    <input type="text" name="username" required/>
+	                    
+	                    <label for="password" class="mt-20" th:text="|#{member.property.password.label} *|"></label>
+	                    <div class="password-container">
+							<input type="password" name="password" id="password" required/>
+							<span onclick="togglePasswordVisibility()" class="show password-toggle">
+							    <img src="/images/show.png" id="passwordToggleImage">
+							</span>
+			             </div>
+			            <button type="submit" class="a_button-black mt-40" th:text="#{login.action.login}"></button>
+			            <a href="/resetPassword" class="mt-10" style="color: darkred; font-size: 0.75rem; text-align: center; cursor: pointer; text-decoration: none;" th:text="#{forgotten.password}"></a>
+			        </form>
+			        <p class="mobile" th:text="#{login.message.or}"></p>
+			        <a href="/signup" class="mobile a_button-color" th:text="#{login.action.sign_up}"></a>
+				</div>
+			</div>
+		</section>
+	</main>	
+	
+	<th:block th:insert="~{base :: return-to-top}"></th:block>	
+	
+	<footer th:replace="~{base :: footer}"></footer>
+	
+	<script src="/js/togglePasswordVisibility.js"></script>
+
+</body>
+</html>

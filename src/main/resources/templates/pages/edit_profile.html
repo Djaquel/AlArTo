@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
+<head>
+	<th:block th:insert="~{base :: head}"></th:block>
+	<title>AuctionApp - Profile</title>
+</head>
+<body>
+	<header th:replace="~{base :: header}"></header>
+		<main>
+			<div class="wrapper-center">
+				<h1 th:text="#{member.profile.edit.title}"></h1>
+				<form id="deleteProfileForm" th:action="@{/deleteProfile}" method="post"></form>
+				<form id="editProfileForm" th:action="@{/editProfile}" th:object="${member}" method="post" class="sign-up-form">
+					<div class="login-form">					
+						<label th:text="#{member.property.pseudo.label}"></label>
+						<input th:value="${member.pseudo}" th:field="*{pseudo}" required>
+						<span th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></span>
+						
+						<label class="mt-10" th:text="#{member.property.lastname.label}"></label>
+						<input th:value="${member.lastname}" th:field="*{lastname}" id="lastname" required>
+						<span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
+						
+						<label class="mt-10" th:text="#{member.property.firstname.label}"></label>
+						<input th:value="${member.firstname}" th:field="*{firstname}" id="firstname" required>
+						<span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>
+						
+						<label class="mt-10" th:text="#{member.property.email.label}"></label>
+						<input th:value="${member.email}" th:field="*{email}" id="email" required>
+						<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+						
+						<label class="mt-10" th:text="#{member.property.phone.label}"></label>
+						<input th:value="${member.phone}" th:field="*{phone}" id="phone" required>
+						<span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+					</div>
+					
+					<div class="login-form">
+						<label th:text="#{member.property.street.label}"></label>
+						<input th:value="${member.street}" th:field="*{street}" id="street" required>
+						<span th:if="${#fields.hasErrors('street')}" th:errors="*{street}"></span>
+						
+						<label class="mt-10" th:text="#{member.property.zipcode.label}"></label>
+						<input th:value="${member.zipCode}" th:field="*{zipCode}" id="zipCode" required>
+						<span th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}"></span>
+						
+						<label class="mt-10" th:text="#{member.property.city.label}"></label>
+						<input th:value="${member.city}" th:field="*{city}" id="city" required>
+						<span th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
+						
+						<label class="mt-10" th:text="#{member.profile.edit.old.password.label}"></label>
+						<input th:name="oldPassword" type="password" th:placeholder="#{member.profile.edit.old.password.placeholder}" required>
+						<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+						
+						<label class="mt-10" th:text="#{member.profile.edit.new.password.label}"></label>
+						<input th:name="newPassword" type="password" th:placeholder="#{member.profile.edit.new.password.placeholder}">
+						<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+
+						<button id="hiddenButton" type="submit" th:name="action" hidden>Save</button>
+						<button id="hiddenButton" form="deleteProfileForm" type="submit" th:name="action" hidden>Delete</button>
+					</div>			
+				</form>		
+					<p id="hiddenButtonMock" class="a_button-black mt-30" th:text="#{member.profile.edit.save.changes}"></p>
+					<p  id="hiddenButtonMock" th:text="#{member.profile.delete.account}" style="color: darkred; font-size: 0.75rem; cursor: pointer;" class="mt-20 mb-50"></p>
+			</div>						
+		</main>	
+		
+	<th:block th:insert="~{base :: return-to-top}"></th:block>
+		
+	<footer th:replace="~{base :: footer}"></footer>
+	
+	<script  src="/js/hiddenButtonClick.js"></script>
+</body>
+</html>

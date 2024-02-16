@@ -1,0 +1,116 @@
+<!-- base -->
+
+<!-- HEAD -->
+<head th:fragment="head" xmlns:sec="http://www.w3.org/1999/xhtml">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link href="/css/styles.css" rel="stylesheet">
+	<link rel="icon" type="image/png" href="/images/icon.png" />	
+	<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+	<script src="https://kit.fontawesome.com/d015b69bde.js" crossorigin="anonymous"></script>
+	<script src="/js/returnToTop.js" defer></script>
+</head>
+
+<!-- HEADER -->
+<header th:fragment="header" class="header-sticky">
+	<div class="desktop">
+		<nav>
+			<a href="/home" aria-label="Redirect to Home Page">
+				<div class="brand hover-scale-small">
+					<img src="/images/logo.png" class="header_logo" alt="Logo AuctionApp"/>
+					<p>AuctionApp</p>
+				</div>
+			</a>
+			<a href="/buyCredit"
+			   sec:authorize="isAuthenticated()"
+			   title="Plus de moula">
+			   	<span th:text="#{member.credits.count}" class="desktop-inline"></span>
+			   	<span th:text="${#authentication.getPrincipal()?.getMember()?.getCredits()}"></span>
+			   	<span th:text="#{member.credits}" class="desktop-inline"></span>
+			   	<span class="inline-medium-screen">c</span>
+			</a>
+			<ul>
+				<li sec:authorize="hasRole('ADMIN')">
+					<a href="/admin" class="hover-scale" aria-label="Redirect to Admin Page" th:text="#{member.action.admin}"></a>
+				</li>
+			    <li sec:authorize="isAuthenticated()">
+					<a href="/home" class="hover-scale" aria-label="Redirect to Auctions Page" th:text="#{member.action.auction}"></a>
+				</li>
+				<li sec:authorize="isAuthenticated()">
+					<a href="/sellingPage" class="hover-scale" aria-label="Redirect to Auction Creation Page" th:text="#{member.action.sell}"></a>
+				</li>
+				<li sec:authorize="isAuthenticated()">
+					<a href="/showProfile" class="hover-scale" aria-label="Redirect to Member Profile Page" th:text="#{member.action.profile}"></a>
+				</li>
+				<li sec:authorize="isAuthenticated()">
+					<a href="/logout" class="hover-scale" aria-label="Redirect to Logout Home Page" th:text="#{login.action.logout}"></a>
+				</li>
+				<li sec:authorize="isAnonymous()">
+					<a href="/signup" class="hover-scale" aria-label="Redirect to Logout Home Page" th:text="#{login.action.sign_up}"></a>
+				</li>					
+				<li sec:authorize="isAnonymous()">
+					<a href="/login" class="hover-scale" aria-label="Redirect to Logout Home Page" th:text="#{login.action.login}"></a>
+				</li>
+				<li>
+					<a th:if="${#locale.getLanguage() != 'fr'}" th:href="@{/lang/fr}">
+						<img class="header_logo" src="/images/fr_flag.png">
+					</a>
+				</li>
+				<li>					
+					<a th:if="${#locale.getLanguage() != 'en'}" th:href="@{/lang/en}">
+						<img class="header_logo" src="/images/uk_flag.png">
+					</a>
+				</li>								
+			</ul>
+
+		</nav>
+	</div>
+	<div class="mobile">
+		<nav>
+			<a href="/sellingPage" aria-label="Redirect to Auction Creation Page">
+				<div class="brand">
+					<img src="/images/plus_mobile.png" class="header_logo" alt="Logo AuctionApp"/>
+					<p>Auction Creation</p>
+				</div>
+			</a>		
+			<a href="/home" aria-label="Redirect to Home Page" class="ml-75 mr-75">
+				<div class="brand">
+					<img src="/images/logo_mobile.png" class="header_logo" alt="Logo AuctionApp"/>
+					<p>AuctionApp</p>
+				</div>
+			</a>
+			<a href="/showProfile" aria-label="Redirect to Home Page">
+				<div class="brand">
+					<img src="/images/profile_mobile.png" class="header_logo" alt="Logo AuctionApp"/>
+					<p>Profile</p>
+				</div>
+			</a>			
+		</nav>				
+	</div>
+</header>
+
+<!-- PAGINATION -->
+	<div th:fragment="pagination(pageable)">
+		<ul class="paginator" th:if="${pageable.getTotalPages() > 1}">
+			<li th:each="index : ${#numbers.sequence(1, pageable.getTotalPages())}" class="paginator-index">
+				<button class="a_pager-color" type="submit" th:name="pageSelect" form="filterForm" th:if="${pageable.getPageIndex() != index - 1}" th:value="${index - 1}" th:text="${index}"></button>
+				<button disabled th:if="${pageable.getPageIndex() == index - 1}" th:text="${index}" class="current-page"></button>
+			</li>
+		</ul>
+	</div>
+
+<!-- RETURN-TO-TOP -->	
+<a th:fragment="return-to-top" href="#return-to-top" class="return-to-top">
+	<i class="fa-solid fa-arrow-up"></i>
+</a>
+
+<!-- FOOTER -->
+<footer th:fragment="footer">
+	<p>&copy; AuctionApp - AlArTo.inc</p>
+	<a th:if="${#locale.getLanguage() != 'fr'}" th:href="@{/lang/fr}" class="mobile">
+		<img class="header_logo" src="/images/fr_flag.png">
+	</a>
+	<a th:if="${#locale.getLanguage() != 'en'}" th:href="@{/lang/en}" class="mobile">
+		<img class="header_logo" src="/images/uk_flag.png">
+	</a>
+</footer>

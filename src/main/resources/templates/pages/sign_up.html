@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
+	<head>
+		<th:block th:insert="~{base :: head}"></th:block>
+		<title>AuctionApp - Sign Up</title>
+	</head>
+<body>
+	<header th:replace="~{base :: header}"></header>
+
+	<main>
+		<section>
+			<div class="wrapper-center">
+				<h1 th:if="${#locale.getLanguage() == 'en'}"><b class="text-secondary">Sign</b>up</h1>
+				<h1 th:if="${#locale.getLanguage() == 'fr'}"><b class="text-secondary">S'</b>inscrire</h1>				
+				
+					<div>
+						<form th:action="@{/signup}" th:object="${member}" method="post" class="sign-up-form">
+							<div class="login-form">
+								<label th:text="|#{member.property.pseudo.label} : |"></label>
+								<input th:field="*{pseudo}" id="pseudo" th:placeholder="#{member.property.pseudo.placeholder}" required>
+								<span th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></span>
+								
+								<label class="mt-20" th:text="|#{member.property.lastname.label} : |"></label>
+								<input th:field="*{lastname}" id="lastname" th:placeholder="#{member.property.lastname.placeholder}" required>
+								<span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
+								
+								<label class="mt-20" th:text="|#{member.property.firstname.label} : |"></label>
+								<input th:field="*{firstname}" id="firstname" th:placeholder="#{member.property.firstname.placeholder}" required>
+								<span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>
+								
+								<label class="mt-20" th:text="|#{member.property.email.label} : |"></label>
+								<input th:field="*{email}" id="email" type="email" th:placeholder="#{member.property.email.placeholder}" required>
+								<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+								
+								<label class="mt-20" th:text="|#{member.property.phone.label} : |"></label>
+								<input th:field="*{phone}" id="phone" th:placeholder="#{member.property.phone.placeholder}" required>
+								<span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+							</div>
+							<div class="login-form">
+								<label th:text="|#{member.property.street.label} : |"></label>
+								<input th:field="*{street}" id="street" th:placeholder="#{member.property.street.placeholder}" required>
+								<span th:if="${#fields.hasErrors('street')}" th:errors="*{street}"></span>
+								
+								<label class="mt-20" th:text="|#{member.property.zipcode.label} : |"></label>
+								<input th:field="*{zipCode}" id="zipCode" th:placeholder="#{member.property.zipcode.placeholder}" required>
+								<span th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}"></span>
+								
+								<label class="mt-20" th:text="|#{member.property.city.label} : |"></label>
+								<input th:field="*{city}" id="city" th:placeholder="#{member.property.city.placeholder}" required>
+								<span th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
+								
+								<label class="mt-20" th:text="|#{member.property.password.label} : |"></label>
+								<div class="password-container">
+									<input type="password" th:field="*{password}" id="password" th:placeholder="#{member.property.password.placeholder}" required>
+									<span onclick="togglePasswordVisibility()" class="show password-toggle">
+							    		<img src="/images/show.png" id="passwordToggleImage">
+									</span>
+									<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+								</div>
+								<button class="a_button-black mt-40" th:text="#{login.action.sign_up}"></button>
+							</div>
+						</form>						
+					</div>
+			</div>
+		</section>
+	</main>
+
+	<th:block th:insert="~{base :: return-to-top}"></th:block>
+	
+	<footer th:replace="~{base :: footer}"></footer>
+	
+	<script src="/js/togglePasswordVisibility.js"></script>
+</body>
+</html>

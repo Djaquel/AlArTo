@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
+<head>
+	<th:block th:insert="~{base :: head}"></th:block>
+	<title>AuctionApp - Admin</title>
+</head>
+<body>
+	
+	<header th:replace="~{base :: header}"></header>
+	
+	<main>
+	<h1 th:text="#{admin.page.title}"></h1>
+
+	<a href="/admin/updateAuctionStatus" class="a_button-color" th:text="#{admin.action.update_auction_status}"></a>
+
+	<div class="flex-row-center mb-50 mt-40">
+		<button id="membersListButton" class="a_button-black mr-10" disabled th:text="#{admin.page.members}"></button>
+		<button id="categoriesListButton" class="a_button-black ml-10" th:text="#{admin.page.categories}"></button>
+	</div>
+
+	<div id="membersList" style="display: block;" class="ml-20">
+		<div th:each="m : ${members}" th:action="@{admin}" class="mb-10">
+			<form th:action="@{/admin}" method="post">
+				<p th:text="${m.pseudo}"></p>
+				<input th:name="memberId" th:value="${m.id}" hidden>
+				<button th:text="#{admin.page.delete.button}" th:name="action" th:value="suppr" class="a_button-red"></button>
+				<button th:text="#{admin.page.disable.button}" th:if="${m.isEnabled()}" th:name="action" th:value="deact" class="a_button-black"></button>
+				<button th:text="#{admin.page.enable.button}" th:if="${!m.isEnabled()}" th:name="action" th:value="react" class="a_button-quaternary"></button>
+			</form>
+		</div>			
+	</div>
+	
+	<div id="categoriesList" style="display: none;" class="ml-20">
+		<div th:each="c : ${categories}" th:action="@{admin}" class="mb-10">
+			<form th:action="@{/deleteCategory}" method="post">
+				<p th:text="#{${c.label}}"></p>
+				<input th:name="categoryId" th:value="${c.id}" hidden>
+				<button class="a_button-red" th:text="#{category.action.delete}"></button>
+			</form>		
+		</div>
+		<form th:action="@{/addCategory}" method="post">
+			<input th:name="categoryLabel" required>
+			<button class="a_button-quaternary" th:text="#{category.action.add}"></button>
+		</form>
+	</div>	
+	</main>
+		
+	<th:block th:insert="~{base :: return-to-top}"></th:block>
+
+	<footer th:replace="~{base :: footer}"></footer>
+	<script src="/js/toggleAdminPage.js"></script>
+</body>
+</html>

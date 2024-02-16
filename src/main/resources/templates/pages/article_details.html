@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
+<head>
+	<th:block th:insert="~{base :: head}"></th:block>
+	<title>AuctionApp - Article</title>
+</head>
+<body>
+	<header th:replace="~{base :: header}"></header>
+	
+	<main>
+		<section class="section_search">
+			
+			<!-- ARTICLE CARD DESKTOP -->
+			<div class="wrapper profile-card mt-75 desktop">
+				
+				<!-- ARTICLE CARD HEADER -->
+				<div class="profile-header">
+					<h1 class="page_h1 text-primasecond" th:text="${article.name}">CCC</h1>	
+				</div>
+				
+				<!-- ARTICLE CARD CONTENT -->
+				<div class="container-column">
+					
+					<!-- ARTICLE IMAGE -->
+					<img th:src="@{'/resources/article/' + ${article.id}}"
+						 onerror="this.src='/images/default_image.jpg'"
+						 class="profile-image">
+					
+					<!-- ARTICLE INFOS -->
+					<div class="container-row">
+						<span class="auction-card-price">
+							<p></p><p th:text="${article.initialPrice}"></p><p>c</p>
+						</span>	
+						<div class="auction-card-duration">
+							<p th:text="${article.auctionStartDate}"></p>
+							<p>&nbsp;-&nbsp;</p>
+							<p th:text="${article.auctionEndDate}"></p>										
+						</div>						
+						<p th:text="#{${article.category.getLabel()}}"></p>
+						<p th:text="${article.seller?.pseudo}"></p>
+						<p th:text="${article.description}"></p>
+						<p th:text="#{${article.getState().getLabel()}}"></p>
+					</div>
+				</div>
+				
+				<!-- ARTICLE CARD FOOTER -->
+				<div class="profile-footer">
+					<form th:action="@{/bet}" method="post" th:if="${article.getState().getValue() == 'IN_PROGRESS'}">
+						<input type="number" th:name="montant" th:value="${article.sellPrice}" size="10">
+						<input th:name="id" th:value="${id}" hidden>
+						<button class="a_button-color" th:text="#{article.actions.makeauctions}"></button>
+					</form>					
+				</div>
+			</div>
+			
+			<!-- ARTICLE CARD MOBILE -->
+			<div class="wrapper profile-card mobile">
+				
+				<!-- ARTICLE CARD HEADER -->
+				<div class="article-card-header">
+					<h1 th:text="${article.name}" class="text-primasecond"></h1>				
+				</div>
+				
+				<!-- ARTICLE CARD CONTENT -->
+				<div class="container-column">
+					<!-- ARTICLE IMAGE -->
+					<img th:src="@{'/resources/article/' + ${article.id}}"
+						 onerror="this.src='/images/default_image.jpg'"
+						 class="profile-image">
+						 
+					<!-- ARTICLE INFOS -->
+					<div class="container-row">
+						<span class="auction-card-price">
+							<p></p><p th:text="${article.initialPrice}"></p><p>c</p>
+						</span>	
+						<div class="auction-card-duration">
+							<p th:text="${article.auctionStartDate}"></p>
+							<p>&nbsp;-&nbsp;</p>
+							<p th:text="${article.auctionEndDate}"></p>										
+						</div>						
+						<p th:text="#{${article.category.getLabel()}}"></p>
+						<p th:text="${article.seller?.pseudo}"></p>
+						<p th:text="${article.description}"></p>
+					</div>
+					
+					<!-- ARTICLE CARD FOOTER -->
+					<div class="article-card-footer">
+						<form th:action="@{/bet}" method="post">
+							<input type="number" th:name="montant" th:value="${article.sellPrice}" size="10">
+							<input th:name="id" th:value="${id}" hidden>
+							<button class="a_button-color" th:text="#{article.actions.makeauctions}"></button>
+						</form>					
+					</div>				 
+				</div>				
+			</div>
+
+		</section>
+
+		<div th:if="${article.seller?.id == curMember}" class="wrapper-center list">
+			<div th:each="auction : ${articleAuctions}" class="array">
+				<span th:text="${auction.member.pseudo}"></span>
+				<span>&nbsp;:&nbsp;</span>
+				<span th:text="${auction.amount}"></span>
+			</div>
+		</div>
+
+	</main>
+	
+	<th:block th:insert="~{base :: return-to-top}"></th:block>
+	
+	<footer th:replace="~{base :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
+<head>
+	<th:block th:insert="~{base :: head}"></th:block>
+
+	<title>AuctionApp - Credit</title>
+</head>
+<body>
+	
+	<header th:replace="~{base :: header}"></header>
+
+	<main>
+		
+		<h1 th:if="${#locale.getLanguage() == 'en'}">Need a <b class="text-secondary">little</b> extra ? </h1>
+		<h1 th:if="${#locale.getLanguage() == 'fr'}">Besoin d'un <b class="text-secondary">peu</b> plus ? </h1>		
+		
+		<div class="wrapper-center">
+			<form th:action="@{/buy}" method="post" class="login-form mt-50">
+				<label th:text="|#{credits.buy_amount.label} :|"></label>
+				<input th:placeholder="#{credits.buy_amount.placeholder}" th:name="numberCredit" type="number">
+				<button th:text="#{credits.action.buy}" class="a_button-black mt-10"></button>
+			</form>
+		</div>
+	</main>
+	
+	<footer th:replace="~{base :: footer}"></footer>
+		
+</body>
+</html>

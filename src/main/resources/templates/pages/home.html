@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
+<head>
+	<th:block th:insert="~{base :: head}"></th:block>
+	<script src="/js/toggleLoggedFilters.js" defer></script>
+
+	<title>AuctionApp - Home</title>
+</head>
+<body>
+	
+	<div class="custom-cursor-element-clicked"></div>
+	
+	<header th:replace="~{base :: header}"></header>
+	
+	<main>
+		
+		<!-- SEARCH SECTION -->
+		<section name="search" class="section_search">
+			<div class="wrapper">
+				<h1 th:if="${#locale.getLanguage() == 'en'}">Looking <b class="text-secondary">for</b> something ? </h1>
+				<h1 th:if="${#locale.getLanguage() == 'fr'}">Envie de <b class="text-secondary">quelque</b> chose ? </h1>
+
+				<div class="search_form">
+					
+					<!-- ANYTIME FILTERS -->					
+					<form id="filterForm" th:object="${search}" th:action="@{/article/search}" method="post">
+						<div class="unlogged-search">
+							<select th:field="*{categoryId}">
+								<option th:each="category: ${@categories}" th:text="#{${category.getLabel()}}"
+										th:value="${category.getId()}"></option>
+							</select>
+							<input type="text" placeholder="I'm looking for. . ."  th:field="*{searchText}">
+							<button type="submit" th:name="pageSelect" th:value="0" class="search_form_button">
+								<i class="fa-solid fa-magnifying-glass"></i>
+							</button>							
+						</div>
+						
+						<!-- LOGGED ONLY FILTERS -->
+                        <div id="loggedSearch">
+							<div class="mobile">
+								<div class="flex-row-center mt-10">
+									<button id="purchasesFiltersButton" class="a_button-black" type="button" disabled th:text="#{articles.purchases}"></button>
+									<button id="mySalesFiltersButton" class="a_button-black" type="button" th:text="#{articles.sells}"></button>
+								</div>								
+							</div>
+                            <div sec:authorize="isAuthenticated" class="logged-search">								
+                                <div class="logged-filter-radio purchases" id="purchases" th:data-selected="*{!ownArticles}">
+									<div class="mobile-hide">
+	                                   	<input type="radio" name="searchType" value="0" th:field="*{ownArticles}" id="buyRadioButton" checked>
+                                    	<label th:text="#{articles.purchases}" for="buyRadioButton"></label>
+                                    </div>
+                                    <div>
+	                                    <input type="checkbox" th:field="*{openedAuctions}" th:disabled="*{ownArticles}" class="buyCheckBox" id="open">
+                                    	<label th:text="#{articles.purchases.opened}" for="open"></label>
+	                                </div>
+	                                <div>
+                                    	<input type="checkbox" th:field="*{currentAuctions}" th:disabled="*{ownArticles}" class="buyCheckBox" id="inProgress">
+                                    	<label th:text="#{articles.purchases.in_progress}" for="inProgress"></label>
+                                    </div>
+                                    <div>
+                                    	<input type="checkbox" th:field="*{wonAuctions}" th:disabled="*{ownArticles}" class="buyCheckBox" id="won">
+                                    	<label th:text="#{articles.purchases.won}" for="won"></label>
+                                   	</div>
+                                </div>
+                                <div class="logged-filter-radio mySales" id="mySales" th:data-selected="*{ownArticles}">
+									<div class="mobile-hide">
+                                    	<input type="radio" name="searchType" value="1" th:field="*{ownArticles}" id="sellRadioButton">
+                                    	<label th:text="#{articles.sells}" for="sellRadioButton"></label>
+                                    </div>
+                                    <div>
+                                    	<input type="checkbox" th:field="*{currentSales}" th:disabled="*{!ownArticles}" class="sellCheckBox" id="current" disabled>
+                                    	<label th:text="#{articles.sells.in_progress}" for="current"></label>
+                                    </div>
+                                    <div>
+    	                                <input type="checkbox" th:field="*{unstartedSales}" th:disabled="*{!ownArticles}" class="sellCheckBox" id="unstarted" disabled>
+	                                    <label th:text="#{articles.sells.unstarted}" for="unstarted"></label>
+    	                            </div>
+    	                            <div>
+                                    	<input type="checkbox" th:field="*{finishedSales}" th:disabled="*{!ownArticles}" class="sellCheckBox" id="finished" disabled>
+                                    	<label th:text="#{articles.sells.finished}" for="finished"></label>
+                                   	</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- TOGGLE FILTERS BUTTON -->
+                        <img src="/images/down.png" sec:authorize="isAuthenticated" id="toggleLoggedFiltersButton">
+					</form>
+				</div>
+			</div>
+		</section>
+	
+		<p th:if="${articles.isEmpty()}" th:text="#{article.message.no_match}"></p>
+		<!-- ARTICLES LIST -->
+		<section name="articles">
+			<div class="wrapper">
+				<div class="container">
+					
+					<!-- ARTICLE CARD -->
+					<div th:each="article : ${articles.getItems()}" class="card hover-scale-small">
+						
+						<a th:href="@{'/article/details/' + ${article.id}}" class="custom-cursor-element">
+						
+						<!-- ARTICLE IMAGE -->
+							<div class="card-image">
+								<img th:src="@{'/resources/article/' + ${article.id}}"
+									 onerror="this.src='/images/default_image.jpg'"
+									 alt="Image du Produit">
+							</div>
+
+							<!-- ARTICLE INFOS -->
+							<div class="card-infos">
+								<h2 th:text="${article.name}" class="card-title truncated-text"></h2>
+								<p  th:if="${article.seller}" th:text="${article.seller.pseudo}" class="auction-card-seller"></p>								
+								<p  th:if="!${article.seller}" th:text="#{article.no.seller}" class="auction-card-seller"></p>	
+								<div>
+									<div class="auction-card-duration">
+										<p th:text="${article.auctionStartDate}" class="startDate"></p>
+										<p>&nbsp;-&nbsp;</p>
+										<p th:text="${article.auctionEndDate}" class="endDate"></p>										
+									</div>
+									<div th:text="#{auction.closed}" class="oldAuction" style="display: none;"></div>
+									<div class="auction-card-duration remainingTime">
+										<span>-&nbsp;</span>
+										<span class="remainingDays"></span>
+										<span th:text="|#{auction.remaining.days}&nbsp;|" class="days">d</span>
+										<span class="remainingHours"></span>
+										<span class="hours">h&nbsp;</span>
+										<span class="remainingMinutes"></span>
+										<span class="minutes">min&nbsp;</span>
+										<span>-</span>
+									</div>									
+									<span class="auction-card-price">
+										<p th:if="${article.buyer.pseudo != article.seller?.pseudo}" class="text-tertiary" th:text="${article.buyer.pseudo}"></p>
+										<p th:if="${article.buyer.pseudo != article.seller?.pseudo}">&nbsp;-&nbsp;</p>
+										<p th:text="${article.sellPrice}"></p><p>c</p>
+									</span>
+								</div>
+								<p sec:authorize="isAuthenticated" class="a_button-color" th:text="#{article.actions.makeauctions}"></p>	
+							</div>							
+						</a>
+					</div>
+				</div>
+			</div>
+			
+			<!-- PAGINATION TOOL -->
+			<th:block th:replace="~{base :: pagination(${articles})}"></th:block>
+		</section>
+		
+	</main>
+	
+	<th:block th:insert="~{base :: return-to-top}"></th:block>
+
+	<footer th:replace="~{base :: footer}"></footer>
+	
+	<script src="/js/remainingTime.js"></script>
+	<script src="/js/cursorOnClick.js"></script>
+</body>
+</html>

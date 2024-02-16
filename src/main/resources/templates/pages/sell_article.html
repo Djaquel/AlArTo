@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
+<head>
+	<th:block th:insert="~{base :: head}"></th:block>
+
+	<title>AuctionApp - Sell</title>
+</head>
+<body>
+	<header th:replace="~{base :: header}"></header>
+	<main>
+		<div class="wrapper-center">
+			
+			<h1 th:text="#{article.sell.creation}"></h1>
+			
+			<form th:action="@{/sellItem}" method="post" enctype="multipart/form-data" class="sign-up-form">
+				<div class="login-form">
+					<label th:text="#{article.property.name.label}"></label>
+					<input th:name="nameArticle" th:placeholder="#{article.property.name.placeholder}" required>
+					
+					<label th:text="#{article.property.description.label}" class="mt-10"></label>
+					<input th:name="description" th:placeholder="#{article.property.description.placeholder}">
+					
+					<label th:text="#{article.property.category.label}" class="mt-10"></label>
+					<select th:name="idCategory" id="selectCategory" required>
+						<option th:each="c : ${categories}" th:text="#{${c.label}}" th:value="${c.id}"></option>
+					</select>
+					
+					<label th:text="#{article.property.initial_price.label}" class="mt-10"></label>
+					<input th:name="price" type="number" th:placeholder="#{article.property.initial_price.placeholder}" min="0" required>
+					
+					<label th:text="#{article.property.auction_start_date.label}" class="mt-10"></label>
+					<input th:name="startingDate" type="date" required>
+				</div>
+				
+				<div class="login-form">
+					<label th:text="#{article.property.auction_end_date.label}"></label>
+					<input th:name="endingDate" type="date" required>
+					
+					<label th:text="#{withdrawal.property.street.label}" class="mt-10"></label>
+					<input th:name="withdrawalStreet" th:value="${member.street}" required>
+					
+					<label th:text="#{withdrawal.property.zipcode.label}" class="mt-10"></label>
+					<input th:name="withdrawalZipCode" th:value="${member.zipCode}" required>
+					
+					<label th:text="#{withdrawal.property.city.label}" class="mt-10"></label>
+					<input th:name="withdrawalCity" th:value="${member.city}" required>
+					
+					<label th:text="#{article.property.picture.label}" class="mt-10"></label>
+					<input th:name="picture" type="file">	
+					
+					<button id="sellCreation" type="submit" th:text="#{article.actions.sell}" hidden></button>
+				</div>
+			</form>	
+			
+			<p id="sellCreationMock" class="a_button-black mt-30 hover-scale-small mb-20" th:text="#{article.sell.creation.button}"></p>			
+						
+		</div>	
+	</main>
+	<th:block th:insert="~{base :: return-to-top}"></th:block>
+
+	<footer th:replace="~{base :: footer}"></footer>
+	
+	<script src="/js/sellCreationButton.js"></script>
+</body>
+</html>
+
+

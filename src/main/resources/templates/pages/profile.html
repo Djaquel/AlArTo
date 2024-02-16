@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
+<head>
+	<th:block th:insert="~{base :: head}"></th:block>
+	<title>AuctionApp - Profile</title>
+</head>
+<body>
+	<header th:replace="~{base :: header}"></header>
+		<main>
+			
+			<!-- PROFILE CARD DESKTOP -->
+			<div class="wrapper profile-card mt-75 mb-75 desktop">
+				
+				<!-- PROFILE HEADER -->
+				<div class="profile-header">
+					<h1 th:text="${member.pseudo}" class="text-primasecond"></h1>
+					<form th:action="@{/editProfile}" th:object="${member}" method="get">					
+						<button class="a_button-color hover-scale-small" th:text="#{member.profile.edit}"></button>
+						<a href="/logout" class="hover-scale mobile a_button-black mt-20" aria-label="Redirect to Logout Home Page">
+							Logout
+						</a>
+					</form>							
+				</div>
+				
+				<!-- PROFILE CONTENT -->			
+				<div class="profile-card-column">
+					
+					<!-- PROFILE IMAGE -->
+					<img src="https://picsum.photos/200" class="profile-image">
+					
+					<!-- PROFILE INFOS -->										
+					<div>
+						<p th:text="${member.lastname}"></p>
+						<p th:text="${member.firstname}"></p>
+						<p th:text="${member.email}"></p>
+						<p th:text="${member.phone}"></p>
+						<p th:text="${member.street}"></p>
+						<p th:text="${member.zipCode}"></p>
+						<p th:text="${member.city}"></p>
+						<div class="mb-20">
+							<span th:text="|${member.credits} crédits|"></span><a href="/buyCredit" class="a_button-color ml-20" title="plus de crédits">+</a>
+						</div>	
+					</div>
+				</div>			
+			</div>
+			
+			
+			<!-- PROFILE CARD MOBILE -->
+			<div class="profile-card mt-50 mobile">
+				
+				<!-- PROFILE CARD HEADER -->
+				<div class="profile-header">
+					<h1 th:text="${member.pseudo}" class="text-primasecond"></h1>
+					<form th:action="@{/editProfile}" th:object="${member}" method="get">					
+						<button>
+							<img src="/images/mobile_profile_page/edit.png">
+						</button>
+					</form>						
+				</div>
+				
+				
+				<img src="https://picsum.photos/200" class="profile-image">
+				<div class="profile-infos">
+					<a sec:authorize="hasRole('ADMIN')" href="/admin" class="a_button-color">
+						ADMIN
+					</a>					
+					<p th:text="${member.lastname}"></p>
+					<p th:text="${member.firstname}"></p>
+					<p th:text="${member.email}"></p>
+					<p th:text="${member.phone}"></p>
+					<p th:text="${member.street}"></p>
+					<p th:text="${member.zipCode}"></p>
+					<p th:text="${member.city}"></p>
+					<div>
+						<span th:text="|${member.credits} crédits|"></span><a href="/buyCredit" class="a_button-color ml-20">+</a>
+					</div>					
+				</div>
+				<a href="/logout" class="hover-scale mobile a_button-black" aria-label="Redirect to Logout Home Page">
+					<img src="/images/mobile_profile_page/logout.png" style="width: 10%; margin: 0 auto; display: block;">
+				</a>
+			</div>		
+			
+		<!-- ARTICLES SECTION -->
+		<section name="articles" id="profileSells" style="display: none;">
+			<div class="wrapper">
+				<div class="container">
+					<div th:each="article : ${articleList}" class="card hover-scale-small">
+						<a th:href="@{'/article/details/' + ${article.id}}">
+							<div class="card-image">
+								<img th:src="@{'/resources/article/' + ${article.id}}"
+									 alt="Image du Produit">
+							</div>
+							<div class="card-infos">
+								<h2 th:text="${article.name}" class="card-title"></h2>
+								<p th:text="${article.seller.pseudo}" class="auction-card-seller"></p>
+								<div>
+									<div class="auction-card-duration">
+										<p th:text="${article.auctionStartDate}"></p>
+										<p>&nbsp;-&nbsp;</p>
+										<p th:text="${article.auctionEndDate}"></p>										
+									</div>
+									<span class="auction-card-price">
+										<p th:if="${article.buyer.pseudo != article.seller.pseudo}" class="text-tertiary" th:text="${article.buyer.pseudo}"></p>
+										<p th:if="${article.buyer.pseudo != article.seller.pseudo}">&nbsp;-&nbsp;</p>
+										<p th:text="${article.sellPrice}"></p><p>c</p></span>
+								</div>
+
+
+								<div class="sign-up-form">
+									<form th:action="@{/modifSell}" method="get">
+										<button class="a_button-black" th:text="#{article.actions.update}"></button>
+										<input hidden readonly th:name="idArticle" th:value="${article.id}">
+									</form>								
+									<form th:action="@{/supprSell}" method="post">
+										<button class="a_button-red" th:text="#{article.actions.delete}"></button>
+										<input hidden readonly th:name="idArticle" th:value="${article.id}">
+									</form>		
+																	
+								</div>
+							</div>							
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>	
+		
+		<div th:if="${articleList.size() > 0}">
+			<hr class="profile-hr">
+            <img src="/images/down.png" class="profile-sells-button" id="toggleProfileSellsButton">			
+		</div>
+		</main>
+		
+	<th:block th:insert="~{base :: return-to-top}"></th:block>		
+		
+	<footer th:replace="~{base :: footer}"></footer>
+	
+	<script src="/js/toggleProfileSells.js"></script>
+</body>
+</html>

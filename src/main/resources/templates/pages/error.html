@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
+<head>
+	<th:block th:insert="~{base :: head}"></th:block>
+	<script src="/js/toggleLoggedFilters.js" defer></script>
+
+	<title>AuctionApp - Error</title>
+</head>
+<body>
+	
+	<header th:replace="~{base :: header}"></header>
+	
+	<main>
+		<div class="wrapper">
+			<h1>Aïe Aïe Aïe</h1>
+			<h2 class="mb-75">C'est <b class="text-secondary">tout</b> cassé...</h2>
+			
+			<span><b>Error message : </b></span><span th:text="${error}"></span>
+		</div>	
+	</main>
+	
+	<footer th:replace="~{base :: footer}"></footer>	
+	
+</body>
+</html>
