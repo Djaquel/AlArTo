@@ -26,6 +26,8 @@ Configured for Gmail address by default
 - <ins>spring.mail.password</ins>
 
 ### Database ###
-There is a script to create tables in your database
+Project has been developped with MariaDB (gradle depedency still present in [build.gradle](build.gradle))
+<br>
+There is a SQL script to create tables and procedures in your database
 <br>
 [create_database.sql](create_database.sql) file in root folder
